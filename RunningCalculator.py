@@ -37,12 +37,12 @@ def main():
         splitsCalculationMinutes = int(splitsCalculation // 60)
         splitsCalculationSeconds = (splitsCalculation - 60 * splitsCalculationMinutes)
         splitsoverall = splitsCalculationMinutes, str("minutes"), (format(splitsCalculationSeconds, ".2f")) +str(" seconds")
-    elif splitsCalculation >= 3600:
+    elif splitsCalculation == 3600:
         splitsCalculationHours = int(splitsCalculation // 3600)
         splitsCalculationMinutes = int(splitsCalculation // 60 - 60)
         splitsCalculationSeconds = (splitsCalculation - 3600)
         splitsoverall = splitsCalculationHours, str("hours"), splitsCalculationMinutes, str("minutes"), (format(splitsCalculationSeconds, ".2f")) + str(" seconds")
-    elif splitsCalculation == 3600:
+    elif splitsCalculation >= 3600:
         splitsCalculationHours = int(splitsCalculation // 3600)
         splitsCalculationMinutes = int(splitsCalculation // 60 - 60)
         splitsCalculationSeconds = ((splitsCalculation - 3600) - 60)
