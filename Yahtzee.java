@@ -1,3 +1,10 @@
+import java.io.File;
+import java.io.IOException;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -9,7 +16,7 @@ import javax.swing.JOptionPane;
  * @author Amit Singh Mehmi
  * Date: March 12th, 2022
  * Description: This program will execute the game of Yahtzee assuming that
- * dice are rolled greatest to least and prizes are Yahtzee, full house, small straight,
+ * dice are rolled least to greatest and prizes are Yahtzee, full house, small straight,
  * large straight, four of a kind and three of a kind 
  *
  */
@@ -17,8 +24,17 @@ public class Yahtzee {
 
 	/**
 	 * @param args
+	 * @throws LineUnavailableException 
+	 * @throws IOException 
+	 * @throws UnsupportedAudioFileException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+
+		// Setting up audio learned from: https://www.youtube.com/watch?v=SyZQVJiARTQ
+		File file = new File("Winner Gagnant!.wav");
+		AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
+		Clip clip = AudioSystem.getClip();
+		clip.open(audioStream);
 
 		// Declaring and initializing image icons 
 		ImageIcon resultIcon = new ImageIcon("resultIcon.png");
@@ -174,6 +190,13 @@ public class Yahtzee {
 				gainLoss = "You gained: $" + (userMoney - intialMoney);
 			}
 
+			// If user wins a prize play audio
+			if (result == "THREE OF A KIND" || result == "FOUR OF A KIND" || result == "FULL HOUSE" || 
+					result == "SMALL STRAIGHT" || result == "LARGE STRAIHGT"|| result == "YAHTZEE") {
+				clip.setMicrosecondPosition(0);	// Resets audio to beginning 
+				clip.start();					// Plays audio
+			}
+
 			// Output values of dice roll and result 
 			JOptionPane.showMessageDialog(null, "| Dice # |  1  |  2  |  3  |  4  |  5  |\n"
 					+ "| Value  |  " + dieValues[0] + "  |  " + dieValues[1] + "  |  " + dieValues[2] + "  |  " + dieValues[3] + "  |  " + dieValues[4] + "  | " + 
@@ -187,6 +210,7 @@ public class Yahtzee {
 				break;
 			}
 			else {
+				clip.stop();
 				continuation = JOptionPane.showConfirmDialog(null, "Would you like to play again? (-$10)", "PLAY AGAIN?",
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, rollAgainIcon);
 
@@ -199,13 +223,13 @@ public class Yahtzee {
 				userMoney = userMoney - 10;
 
 			}
-		}
+		}	// End of while loop
 
 		// Thank you message with money gained/loss 
 		JOptionPane.showMessageDialog(null, "Thank you for playing Yahtzee!\n" + gainLoss, "YAHTZEE!", JOptionPane.INFORMATION_MESSAGE, yahtzeeIcon);
 
-	}
+	} // End of main method
 
 
-}
+}	// End of class 
 
